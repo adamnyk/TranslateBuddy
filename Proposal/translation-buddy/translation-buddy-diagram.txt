@@ -1,0 +1,25 @@
+# quickdatabasediagrams.com
+
+user
+-
+id PK int
+username string
+password hash
+image url
+bio text
+
+
+translation
+- 
+id PK int
+list_id FK >- list.id int
+text_from string
+text_to string
+lang_from string
+lang_to string
+
+list
+-
+id PK int
+user_id FK >- user.id int
+name text
