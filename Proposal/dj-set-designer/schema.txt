@@ -1,0 +1,40 @@
+# quickdatabasediagrams.com
+
+user
+-
+id PK int
+username string
+password hash
+image url
+bio text
+
+show
+-
+id PK int
+name string
+date date
+user_id FK >- user.id int
+
+track
+-
+id PK int
+name string
+artist string
+album string
+audio url
+runtime time
+note text
+show_id FK >- show.id int
+
+note
+-
+id PK int
+text text
+show_id FK >- show.id int
+
+
+# confused how to order notes and songs in show
+# ideas:
+    # - create a join table 'sequence' with FKs from note & track
+    # - do a full join and sort by sequence number (could create duplicates!)
+    
