@@ -18,7 +18,7 @@ text_to string
 lang_from string
 lang_to string
 
-list
+phrasebook
 -
 id PK int
 user_id FK >- user.id int
