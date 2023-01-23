@@ -20,7 +20,7 @@ Answer questions like the ones below, but feel free to add more information:
 
 ### What does your database schema look like?
 
-### ![translation-buddy-diagram](/Users/adampecan/Documents/Springboard/Exercises/34_Capstone_1/Proposal/translation-buddy/translation-buddy-diagram.png)
+### ![translation-buddy-diagram](/translation-buddy-diagram.png)
 
 ### What kinds of issues might you run into with your api?
 
