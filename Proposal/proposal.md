@@ -6,19 +6,17 @@ Translation buddy will enable users to translate words or phrases from and to th
 
 ## User Demographics
 
-The users of this site are people who are learning a new language or are visitng another contry and want to look up and refrence frequently used phrases. 
+The users of this site are people who are learning a new language or are visitng another contry and want to look up and refrence frequently used phrases.
 
 ## Data Usage
 
-I plan to use translation data from [DeepL Translator](https://www.deepl.com/translator). A python client library is also available. 
+I plan to use translation data from [DeepL Translator](https://www.deepl.com/translator). A python client library is also available.
 
 ## Approach
 
-
-
 ### Database Schema
 
-### ![translation-buddy-diagram](/Proposal/translation-buddy/translation-buddy-diagram.png)
+### ![translation-buddy-diagram](/proposal/translation-buddy-diagram.png)
 
 ### Potential API issues
 
@@ -37,7 +35,7 @@ User login passwords
 - CRUD User
   - user / password authentication
 - CRUD word lists
-- User written translation notes 
+- User written translation notes
   - (pronunciation, mnemonics, formality, regional differences, etc.)
 
 **Nice to have features**
@@ -46,7 +44,7 @@ User login passwords
 - Share word lists between users
 - Provide recommended starter phrases
 
-**Potential future features**  
+**Potential future features**
 
 - Audio pronuncation (text to speech)
 - Transliteration into user's native alphabet
@@ -58,10 +56,9 @@ User login passwords
    2. No - site retains only basic translation featues
 2. Logged in users can translate phrases and add custom notes
 3. Users can create lists (phrasebooks) to save and organize their favorite translations or share them with other users
-4. Users can export their phrasebooks to a printable / downloadable form for eazy reference when traveling 
-   1. To create 'cheat sheets' more efficently, users can upload a list of phrases in a .txt document and recieve a new file with side by side translations. 
+4. Users can export their phrasebooks to a printable / downloadable form for easy reference when traveling
+   1. To create 'cheat sheets' more efficently, users can upload a list of phrases in a .txt document and recieve a new file with side by side translations.
 
+### Beyond CRUD / stretch goals
 
-###  Beyond CRUD / stretch goals
-
-- Create downloadable / printable  'cheat sheet' from an uploaded user document or user phrasebooks
+- Create downloadable / printable 'cheat sheet' from an uploaded user document or user phrasebooks
