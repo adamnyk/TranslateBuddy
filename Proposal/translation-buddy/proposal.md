@@ -1,35 +1,35 @@
 # Translation Buddy
 
-## What goal will your website be designed to achieve?
+## Website Goal
 
 Translation buddy will enable users to translate words or phrases from and to the language of their choice. Under their profie, users can save favorite words and create collections of words to be refered to later or shared with all users.
 
-## What kind of users will visit your site? In other words, what is the demographic of your users?
+## User Demographics
 
-The users of this site are people who are learning a new language or are visitng another contry and want to remember frequently used phrases and be able refer to them quickly for study. 
+The users of this site are people who are learning a new language or are visitng another contry and want to look up and refrence frequently used phrases. 
 
-## What data do you plan on using?
+## Data Usage
 
-I plan to use translation data from Google's Translation API. A python client library is available. 
+I plan to use translation data from [DeepL Translator](https://www.deepl.com/translator). A python client library is also available. 
 
-## In brief, outline your approach to creating your project 
+## Approach
 
-Answer questions like the ones below, but feel free to add more information:
 
-### What does your database schema look like?
+
+### Database Schema
 
 ### ![translation-buddy-diagram](/Proposal/translation-buddy/translation-buddy-diagram.png)
 
-### What kinds of issues might you run into with your api?
+### Potential API issues
 
-- 3 month trial for Google Cloud services
 - 500,000 characters/month free limit
+- No transliteration into Latin script (limited useful language support)
 
-### Is there any sensitive information you need to secure?
+### Sensitive information to secure
 
-The user's password
+User login passwords
 
-### What functionality will your app include?
+### App Functionality
 
 **Core Features**
 
@@ -37,26 +37,31 @@ The user's password
 - CRUD User
   - user / password authentication
 - CRUD word lists
-
-**Nice to have**
-
-- Share word lists between users
-- Input language detection
-- Audio pronuncation
-- Provide recommended starter phrases
 - User written translation notes 
   - (pronunciation, mnemonics, formality, regional differences, etc.)
+
+**Nice to have features**
+
+- Create downloadable / printable study list (from list or imported file of phrases)
+- Share word lists between users
+- Provide recommended starter phrases
+
+**Potential future features**  
+
+- Audio pronuncation (text to speech)
 - Transliteration into user's native alphabet
 
-### What will the user flow look like?
+### User Flow
 
 1. Register user / sign in
    1. Yes - continue
    2. No - site retains only basic translation featues
+2. Logged in users can translate phrases and add custom notes
+3. Users can create lists (phrasebooks) to save and organize their favorite translations or share them with other users
+4. Users can export their phrasebooks to a printable / downloadable form for eazy reference when traveling 
+   1. To create 'cheat sheets' more efficently, users can upload a list of phrases in a .txt document and recieve a new file with side by side translations. 
 
-2. Se
-3. Add translation to favorites or a list
-4. Share list with other users
 
-###  What features make your site more than CRUD? Do you have any stretch goals?
+###  Beyond CRUD / stretch goals
 
+- Create downloadable / printable  'cheat sheet' from an uploaded user document or user phrasebooks
