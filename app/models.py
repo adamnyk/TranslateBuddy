@@ -28,7 +28,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    phrasebooks = db.relationship("Phrasebook", backref="user", passive_deletes="all")
+    phrasebooks = db.relationship("Phrasebook", backref="user", cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}>"
@@ -83,7 +83,9 @@ class Phrasebook(db.Model):
     )
 
     user_id = db.Column(
-        db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        db.Integer, 
+        db.ForeignKey("users.id"), 
+        nullable=False
     )
 
     public = db.Column(
@@ -96,7 +98,6 @@ class Phrasebook(db.Model):
         "Translation",
         secondary="phrasebook_translation",
         backref="phrasebooks",
-        # passive_deletes="all",
     )
 
     def __repr__(self):
@@ -115,12 +116,12 @@ class PhrasebookTranslation(db.Model):
 
     phrasebook_id = db.Column(
         db.Integer,
-        db.ForeignKey("phrasebooks.id", ondelete='CASCADE'),
+        db.ForeignKey("phrasebooks.id")
     )
 
     translation_id = db.Column(
         db.Integer,
-        db.ForeignKey("translations.id", ondelete='CASCADE'),
+        db.ForeignKey("translations.id")
     )
 
     note = db.Column(db.Text)
@@ -156,7 +157,6 @@ class Translation(db.Model):
         nullable=False,
     )
 
-    # note = db.Column(db.Text)
     
     def __repr__(self):
         return f"<Translation #{self.id}: {self.text_from} >> {self.text_to}>"
