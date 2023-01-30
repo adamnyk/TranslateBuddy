@@ -58,12 +58,19 @@ db.session.commit()
 # Add Phrasebook <> Translation connections
 
 adam_hello = PhrasebookTranslation(phrasebook_id=1,
-                                   translation_id=1)
+                                   translation_id=1,
+                                   note="Adam's hello translation")
+
+caro_hello = PhrasebookTranslation(phrasebook_id=2,
+                                   translation_id=1,
+                                    note="Caros's hello translation")
 
 caro_cheese = PhrasebookTranslation(phrasebook_id=2,
-                                   translation_id=2)
+                                   translation_id=2,
+                                   note="Caro's cheese translation")
 
 db.session.add(adam_hello)
+db.session.add(caro_hello)
 db.session.add(caro_cheese)
 
 db.session.commit()
