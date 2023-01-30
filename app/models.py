@@ -2,6 +2,8 @@
 
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_utils import auto_delete_orphans
+
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -65,6 +67,16 @@ class User(db.Model):
                 return user
 
         return False
+    
+    @classmethod
+    def delete(cls, user):
+        """Detlete user and any orphaned translations."""
+        translations = {t for pb in user.phrasebooks for t in pb.translations}
+        
+        db.session.delete(user)
+        
+        for t in translations:
+            Translation.delete_orphan(t)
 
 
 class Phrasebook(db.Model):
@@ -102,6 +114,23 @@ class Phrasebook(db.Model):
 
     def __repr__(self):
         return f"<Phrasebook #{self.id}: {self.name}>"
+    
+    @classmethod
+    def delete(self, phrasebook):
+        translations = phrasebook.translations
+        db.session.delete(phrasebook)
+        
+        for t in translations:
+            Translation.delete_orphan(t)
+    
+    @classmethod
+    def delete_translation(self, translation, phrasebook):
+        '''Delete phrasebook translation association and delete translation if orphaned.'''
+        
+        pt = PhrasebookTranslation.query.get((phrasebook.id, translation.id))
+        db.session.delete(pt)
+        
+        Translation.delete_orphan(translation)
 
 
 class PhrasebookTranslation(db.Model):
@@ -109,22 +138,27 @@ class PhrasebookTranslation(db.Model):
 
     __tablename__ = "phrasebook_translation"
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    # id = db.Column(
+    #     db.Integer,
+    #     primary_key=True
+    # )
 
     phrasebook_id = db.Column(
         db.Integer,
-        db.ForeignKey("phrasebooks.id")
+        db.ForeignKey("phrasebooks.id"),
+        primary_key=True
     )
 
     translation_id = db.Column(
         db.Integer,
-        db.ForeignKey("translations.id")
+        db.ForeignKey("translations.id"),
+        primary_key=True
     )
 
     note = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<Phrasebook #{self.phrasebook_id}, Translation #{self.translation_id}>"
 
 
 class Translation(db.Model):
@@ -160,7 +194,13 @@ class Translation(db.Model):
     
     def __repr__(self):
         return f"<Translation #{self.id}: {self.text_from} >> {self.text_to}>"
-
+    
+    @classmethod
+    def delete_orphan(self, translation):
+        """Delete translation if it does not belong to any phrasebook."""
+        if not len(translation.phrasebooks):
+            db.session.delete(translation)
+   
 
 def connect_db(app):
     """Connect this database to provided Flask app."""
