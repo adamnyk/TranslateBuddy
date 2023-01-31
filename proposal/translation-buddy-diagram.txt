@@ -11,11 +11,15 @@ image url
 translation
 - 
 id PK int
-phrasebook_id FK >- phrasebook.id int
 text_from string
 text_to string
 lang_from string
 lang_to string
+
+phrasebook_translation
+-
+phrasebook_id PK int FK >- phrasebook.id
+translation_id PK int FK >- translation.id
 note text
 
 phrasebook
@@ -24,5 +28,6 @@ id PK int
 name text
 user_id FK >- user.id int
 public boolean
+
 
 
