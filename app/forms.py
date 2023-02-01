@@ -8,7 +8,7 @@ class UserAddForm(FlaskForm):
     """User registration form."""
     username = StringField('Username', validators=[DataRequired(), Length(min=6)])
     password = PasswordField('Password', validators=[Length(min=6)])
-    password_confirm = PasswordField('Confirm Password', validators=EqualTo('password'))
+    password_confirm = PasswordField('Confirm Password', validators=[EqualTo('password')])
 
 
 class LoginForm(FlaskForm):

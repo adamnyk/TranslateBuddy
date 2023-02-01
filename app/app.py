@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, session, redirect, flash, jsonify, g
 from models import db, connect_db, User, Translation, Phrasebook, PhrasebookTranslation
+from forms import LoginForm, UserAddForm
+from sqlalchemy.exc import IntegrityError
 import deepl
 from secret import API_AUTH_KEY, SESSION_KEY
 
@@ -118,7 +120,14 @@ def logout():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    login_form = LoginForm()
+    register_form = UserAddForm()
+
+    
+    return render_template('home.html', login_form=login_form, register_form=register_form)
+
+####################################################################################
+
 
 
 
@@ -138,3 +147,5 @@ def home():
 # with open('phrases.txt') as f1, open('result.txt') as f2:
 #     for l1, l2 in zip(f1,f2):
 #         print(l1 + '          ' + l2)
+
+###################################################################################

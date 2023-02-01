@@ -1,0 +1,13 @@
+<form method='POST' action='/login' class="px-4 py-3">
+    {{login_form.hidden_tag()}}
+
+    {% for field in login_form if field.widget.input_type != 'hidden' %}
+         {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          
+        {{ field(placeholder=field.label.text, class="form-group") }}
+    {% endfor %}
+    
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
