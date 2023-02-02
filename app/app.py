@@ -1,13 +1,14 @@
 from flask import Flask, render_template, url_for, session, redirect, flash, jsonify, g
+from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Translation, Phrasebook, PhrasebookTranslation
-from forms import LoginForm, UserAddForm
+from forms import LoginForm, UserAddForm, TranslateForm
 from sqlalchemy.exc import IntegrityError
 import deepl
 from secret import API_AUTH_KEY, SESSION_KEY
 
 import os
 
-CURR_USER_KEY = None
+CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
@@ -17,11 +18,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', SESSION_KEY)
+toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
 translator = deepl.Translator(API_AUTH_KEY)
-languages = [l.name for l in translator.get_target_languages()]
+languages = [(l.code, l.name) for l in translator.get_target_languages()]
 
 
 ##############################################################################
@@ -51,7 +53,7 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
-@app.route('/signup', methods=["GET", "POST"])
+@app.route('/signup', methods=["POST"])
 def signup():
     """Handle user signup.
     Create new user and add to DB. Redirect to home page.
@@ -61,31 +63,32 @@ def signup():
     """
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-    form = UserAddForm()
-
-    if form.validate_on_submit():
+    
+    register_form = UserAddForm()
+    login_form = LoginForm()
+    
+    if register_form.validate_on_submit():
         try:
             user = User.signup(
-                username=form.username.data,
-                password=form.password.data,
-                email=form.email.data,
-                image_url=form.image_url.data or User.image_url.default.arg,
+                username=register_form.username.data,
+                password=register_form.password.data
             )
             db.session.commit()
 
         except IntegrityError as e:
             flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+            return redirect("/")
 
         do_login(user)
-
+        flash("Welcome! Account created.", 'success')
         return redirect("/")
 
-    else:
-        return render_template('users/signup.html', form=form)
+    flash("Reigistration failed!", 'danger')
+            
+    return render_template("home.html", register_form=register_form, login_form=login_form)
 
 
-@app.route('/login', methods=["GET", "POST"])
+@app.route('/login', methods=["POST"])
 def login():
     """Handle user login."""
 
@@ -100,9 +103,9 @@ def login():
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
 
-        flash("Invalid credentials.", 'danger')
+        flash("Invalid login credentials.", 'danger')
 
-    return render_template('users/login.html', form=form)
+    return redirect("/")
 
 
 @app.route('/logout')
@@ -112,7 +115,7 @@ def logout():
     do_logout()
 
     flash("You have successfully logged out.", 'success')
-    return redirect("/login")
+    return redirect("/")
 
 
 ####################################################################################
@@ -122,13 +125,21 @@ def logout():
 def home():
     login_form = LoginForm()
     register_form = UserAddForm()
+    translate_form = TranslateForm(target_lang="ES")
+    translate_form.target_lang.choices = languages
+
 
     
-    return render_template('home.html', login_form=login_form, register_form=register_form)
+    return render_template('home.html', login_form=login_form, register_form=register_form, translate_form=translate_form)
 
 ####################################################################################
+# User Routes
 
-
+@app.route('/user/<int:user_id>')
+def show_user(user_id):
+    """Show user profile and phrasebooks."""
+    
+    return render_template("/user/profile.html")
 
 
 ######## 
