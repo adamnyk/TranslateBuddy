@@ -1,13 +1,16 @@
-<form method='POST' action='/register' class="px-4 py-3">
+<form method='POST' action='/signup' class="px-4 py-3">
     {{register_form.hidden_tag()}}
 
     {% for field in register_form if field.widget.input_type != 'hidden' %}
-         {% for error in field.errors %}
-        <span class="text-danger">{{ error }}</span>
-          {% endfor %}
+        {% for error in field.errors %}
+
+
+          <span class="text-danger small">{{ error }}</span>
+
+        {% endfor %}
           
-        {{ field(placeholder=field.label.text, class="form-group") }}
+        {{ field(placeholder=field.label.text, class="form-group has-danger") }}
     {% endfor %}
     
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary btn-sm">Register</button>
   </form>
