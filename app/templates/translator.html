@@ -2,20 +2,37 @@
     <div class="card bg-light mb-3" style="max-width: 20rem;">
         
         <label for="target_lang" class='card-header form-label '>Translate into:
-            {{translate_form.target_lang}}
         </label>
 
         <div class="card-body">
 
             <form action="/translate" method="POST">
-                
+                {{translate_form.hidden_tag()}}
+
                 {{translate_form.translate_text(class="form-control", 
                 placeholder=translate_form.translate_text.label.text,
-                cols="40", rows="5")}}
+                cols="40", rows="5", autofocus=true)}}
+
+                {{translate_form.target_lang}}
+
 
                 <button type="submit" class="btn btn-primary mt-3">Translate</button>
+
+                {% if g.user %}
+
+                {% endif %}
     
             </form>
         </div>
+      </div>
+
+      <div>
+        <h1>RESULT:</h1>
+        
+          {% if session['last_translation'] %}
+          <p>{{session['last_translation'].text_to}}</p>
+          {% endif %}
+
+    
       </div>
 </div>

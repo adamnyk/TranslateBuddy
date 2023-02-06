@@ -1,1 +1,31 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<h1 class="display-3 d-inline-block">{{g.user.username}}</h1> 
+
+{% include "forms/user_edit.html" %}
+
+{% include "forms/add_phrasebook.html" %}
+
+<div class="container my-4">
+    {% if g.user.phrasebooks %}
+    <h2>Phrasebooks</h2>
+    {% endif %}
+
+    <ul>
+        {% for p in g.user.phrasebooks %}
+        <li>{{p.name}}
+            <form action="phrasebook/{{p.id}}/delete" method="POST" class="d-inline">
+                <button class=" badge badge-danger p-1 ml-3 btn"> Delete </button>
+            </form>
+            
+        </li>  
+
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% include "/forms/delete_user_modal.html" %}   
+
+{% endblock content %}

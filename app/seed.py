@@ -23,6 +23,17 @@ db.session.add(caro)
 
 db.session.commit()
 
+# Add real users
+adamnyk = User(username="adamnyk",
+               password="$2b$12$nL984KCxBMNZ9XgA9DrY4uz44S48e9x9kJRcqiszoxo.4xwRe2wpK")
+
+carolynpc = User(username="carolynpc",
+               password="$2b$12$PISmpjqI55l825D80j8Aterl5y2BzIaHbWnzUlBISLmnQfID5xCZy")
+
+db.session.add(adamnyk)
+db.session.add(carolynpc)
+
+db.session.commit()
 
 # Add phrasebooks
 Phrasebook.query.delete()

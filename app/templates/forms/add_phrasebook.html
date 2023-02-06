@@ -1,0 +1,26 @@
+<div class="dropdown">
+    <a class="btn btn-sm btn-outline-success"
+                            data-bs-toggle="dropdown"
+                            href="#"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            >+ Phrasebook</a>
+    <div class="dropdown-menu">
+        <form method="POST" action="phrasebook/add" class="px-4 pt-1">
+        
+            {{phrasebook_add_form.hidden_tag()}}
+        
+                  
+            {{phrasebook_add_form.name(placeholder="Name", class="form-group d-inline")}}
+            
+            <div class="custom-control custom-checkbox mb-2 d-inline-block">
+                {{phrasebook_add_form.public(class="custom-control-input")}}
+                {{phrasebook_add_form.public.label(class="custom-control-label pl-0 ")}}
+            </div>
+            
+            <button type="submit" class="btn btn-sm btn-primary  ml-2">Add</button>
+        </form>        
+    </div>
+</div>
+    

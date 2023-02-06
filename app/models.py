@@ -68,16 +68,15 @@ class User(db.Model):
 
         return False
     
-    @classmethod
-    def delete(cls, user):
+
+    def delete(self):
         """Detlete user and any orphaned translations."""
-        translations = {t for pb in user.phrasebooks for t in pb.translations}
+        translations = {t for pb in self.phrasebooks for t in pb.translations}
         
-        db.session.delete(user)
+        db.session.delete(self)
         
         for t in translations:
-            Translation.delete_orphan(t)
-
+            t.delete_orphan()
 
 class Phrasebook(db.Model):
     """A user's saved collection of phrases."""
@@ -115,22 +114,22 @@ class Phrasebook(db.Model):
     def __repr__(self):
         return f"<Phrasebook #{self.id}: {self.name}>"
     
-    @classmethod
-    def delete(self, phrasebook):
-        translations = phrasebook.translations
-        db.session.delete(phrasebook)
+
+    def delete(self):
+        translations = self.translations
+        db.session.delete(self)
         
         for t in translations:
-            Translation.delete_orphan(t)
+            t.delete_orphan()
     
-    @classmethod
-    def delete_translation(self, translation, phrasebook):
+
+    def delete_translation(self, translation):
         '''Delete phrasebook translation association and delete translation if orphaned.'''
         
-        pt = PhrasebookTranslation.query.get((phrasebook.id, translation.id))
+        pt = PhrasebookTranslation.query.get((self.id, translation.id))
         db.session.delete(pt)
         
-        Translation.delete_orphan(translation)
+        translation.delete_orphan()
 
 
 class PhrasebookTranslation(db.Model):
@@ -195,12 +194,17 @@ class Translation(db.Model):
     def __repr__(self):
         return f"<Translation #{self.id}: {self.text_from} >> {self.text_to}>"
     
-    @classmethod
-    def delete_orphan(self, translation):
+
+    def delete_orphan(self):
         """Delete translation if it does not belong to any phrasebook."""
-        if not len(translation.phrasebooks):
-            db.session.delete(translation)
-   
+        if not len(self.phrasebooks):
+            db.session.delete(self)
+
+    def to_dict(self):
+        """Serialize """
+        dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        
+        return dict
 
 def connect_db(app):
     """Connect this database to provided Flask app."""

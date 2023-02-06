@@ -1,0 +1,36 @@
+<div class="dropdown d-inline-block mx-3">
+    <a class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            href="#"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            >+</a>
+      <div class="dropdown-menu">
+        <form method="POST" action="translation/add" class="px-4 pt-1">
+          <h6 class="dropdown-header">Edit username</h6>
+        
+            {{user_edit_form.hidden_tag()}}
+        
+            {% for field in user_edit_form if field.widget.input_type != 'hidden' %}
+                 {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+                  {% endfor %}
+                  
+                {{ field(placeholder=field.label.text, class="form-group") }}
+            {% endfor %}
+            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+            
+            <div class="dropdown-divider "></div>
+          </form>
+        
+          <!-- Modal -->
+          <button type="button" class="btn btn-sm btn-outline-danger mx-4 my-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Delete User
+          </button>
+      </div>
+  </div>
+  
+  
+  
+  
