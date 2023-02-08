@@ -17,10 +17,6 @@
 
 
                 <button type="submit" class="btn btn-primary mt-3">Translate</button>
-
-                {% if g.user %}
-
-                {% endif %}
     
             </form>
         </div>
@@ -30,7 +26,11 @@
         <h1>RESULT:</h1>
         
           {% if session['last_translation'] %}
-          <p>{{session['last_translation'].text_to}}</p>
+          <div>
+            <span class="h6">{{session['last_translation'].text_to}}</span> 
+            {% include "/forms/add_translation.html" %}
+        </div>
+          
           {% endif %}
 
     

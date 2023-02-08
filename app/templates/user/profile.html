@@ -7,23 +7,11 @@
 
 {% include "forms/add_phrasebook.html" %}
 
-<div class="container my-4">
-    {% if g.user.phrasebooks %}
-    <h2>Phrasebooks</h2>
-    {% endif %}
+{% if g.user.phrasebooks %}
+    {% include "/user/phrasebooks.html" %}
+{% endif %}
 
-    <ul>
-        {% for p in g.user.phrasebooks %}
-        <li>{{p.name}}
-            <form action="phrasebook/{{p.id}}/delete" method="POST" class="d-inline">
-                <button class=" badge badge-danger p-1 ml-3 btn"> Delete </button>
-            </form>
-            
-        </li>  
 
-        {% endfor %}
-    </ul>
-</div>
 
 
 {% include "/forms/delete_user_modal.html" %}   

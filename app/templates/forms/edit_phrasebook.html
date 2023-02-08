@@ -1,0 +1,28 @@
+<div class="dropdown d-inline">
+    <a class="badge badge-info p-1 btn"
+                            data-bs-toggle="dropdown"
+                            href="#"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            >Edit</a>
+    <div class="dropdown-menu">
+        <h6 class="dropdown-header">Edit phrasebook</h6>
+
+        <form method="POST" action="phrasebook/{{p.id}}/edit" class="px-4 pt-1">
+        
+            {{phrasebook_add_form.hidden_tag()}}
+        
+                  
+            {{phrasebook_add_form.name(placeholder="Name", class="form-group d-inline")}}
+            
+            <div class="custom-control custom-checkbox mb-2 d-inline-block">
+                {{phrasebook_add_form.public(class="custom-control-input")}}
+                {{phrasebook_add_form.public.label(class="custom-control-label pl-0 ")}}
+            </div>
+            
+            <button type="submit" class="btn btn-sm btn-primary  ml-2">Add</button>
+        </form>        
+    </div>
+</div>
+    

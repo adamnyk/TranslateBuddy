@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, session, redirect, flash, jsonify, g
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Translation, Phrasebook, PhrasebookTranslation
-from forms import LoginForm, UserAddForm, TranslateForm, UserEditForm, PhrasebookForm
+from forms import LoginForm, UserAddForm, TranslateForm, UserEditForm, PhrasebookForm, AddTranslationForm
 from sqlalchemy.exc import IntegrityError
 import deepl
 from secret import API_AUTH_KEY, SESSION_KEY
@@ -58,6 +58,19 @@ def clear_translation():
     if "last_translation" in session:
         del session["last_translation"]
         
+def find_existing_translation(translation):
+    """Given a translation, find an existing translation with the same information.
+    If translation exists, return it, otherwise return None."""
+        
+    found = Translation.query.filter_by(
+        text_from=translation.text_from, 
+        text_to=translation.text_to, 
+        lang_to=translation.lang_to).first()
+    
+    if found:
+        return found
+    return False
+        
 def check_login():
     """Check if user is logged in. If not redirect home and flash message."""
     if not g.user:
@@ -68,7 +81,6 @@ def do_login(user):
     """Log in user."""
 
     session[CURR_USER_KEY] = user.id
-
 
 
 def do_logout():
@@ -126,7 +138,6 @@ def login():
 
         if user:
             do_login(user)
-            clear_translation()
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
 
@@ -153,12 +164,19 @@ def logout():
 def home():
     login_form = LoginForm()
     register_form = UserAddForm()
-    translate_form = TranslateForm(target_lang= session.get("lang") or "ES")
+    translate_form = TranslateForm(target_lang= session.get("lang_to") or "ES")
     translate_form.target_lang.choices = languages
+    
+    save_translation_form = AddTranslationForm()
+    if g.user:
+        save_translation_form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
+        
 
     session['last_url'] = url_for('home')
+
+
     
-    return render_template('home.html', login_form=login_form, register_form=register_form, translate_form=translate_form)
+    return render_template('home.html', login_form=login_form, register_form=register_form, translate_form=translate_form, save_translation_form=save_translation_form)
 
 ####################################################################################
 # Translate Routes
@@ -175,7 +193,7 @@ def translate():
         
         translation = get_translation(form.translate_text.data, form.target_lang.data)
 
-        session["lang"] = translation.lang_to
+        session["lang_to"] = translation.lang_to
         session["last_translation"] = translation.to_dict()
 
         return redirect(session["last_url"])
@@ -271,12 +289,61 @@ def add_phrasebook():
 def delete_phrasebook(pb_id):
     """Delete phrasebook from database."""
 
+    check_login()
     pb = Phrasebook.query.get_or_404(pb_id)
     pb.delete()
     db.session.commit()
 
-    return redirect("/user")    
+    return redirect("/user")   
 
+
+@app.route('/translation/add', methods=["POST"])
+def add_translation():
+    """Add translation to database and add association to one or more phrasebooks."""
+    
+    check_login()
+    form = AddTranslationForm()
+
+    if not form.phrasebooks.data:
+        flash("No data submitted", "danger")
+        return redirect("/")
+    
+    phrasebooks = form.phrasebooks.data
+    
+    
+    new_translation = Translation(**session["last_translation"])
+    if find_existing_translation(new_translation):
+        new_translation = find_existing_translation(new_translation)
+    
+    db.session.add(new_translation)
+    db.session.commit()    
+
+
+    for pb_id in form.phrasebooks.data:
+        pb = Phrasebook.query.get(pb_id)
+        pb.translations.append(new_translation)
+        db.session.commit()
+        
+
+    flash("Translation saved", "success")
+    return redirect(session["last_url"])
+
+    # if form.validate_on_submit():
+    # return redirect(session["last_url"])
+
+
+@app.route('/phrasebook/<int:pb_id>/translation/<int:t_id>/delete', methods=["POST"])
+def delete_translation(pb_id, t_id):
+    """Delete translation from phrasebook and its association in database.
+    Check if translation is orphaned, and if so, delete it from the database."""
+    
+    check_login()
+    pb = Phrasebook.query.get_or_404(pb_id)
+    t = Translation.query.get_or_404(t_id)
+    pb.delete_translation(t)
+    db.session.commit()
+    
+    return redirect(session["last_url"])
 
 
 ######## 

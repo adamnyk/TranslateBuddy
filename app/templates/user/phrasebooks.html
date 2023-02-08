@@ -1,0 +1,51 @@
+<div class="container my-4">
+    <h2>Phrasebooks</h2>
+
+    <ul>
+        {% for p in g.user.phrasebooks %}
+        <li>
+            <a 
+            class="btn btn-outline-secondary m-1 mr-4 "
+            href="#phrasebook{{p.id}}" 
+            data-bs-toggle="collapse" 
+            aria-expanded="false" 
+            aria-controls="phrasebook{{p.id}}">
+            {{p.name}}
+            <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
+            </a>
+
+
+
+            {% include "forms/edit_phrasebook.html" %}
+
+            <form action="phrasebook/{{p.id}}/delete" method="POST" class="d-inline">
+                <button class=" badge badge-danger p-1 m-2 btn"> Delete </button>
+            </form>
+        </li>  
+
+        <div class="container collapse " id="phrasebook{{p.id}}">
+            <div class=" py-2">
+                <table class="table table-sm mb-0"> 
+                    <tbody>
+                        {% for t in p.translations %}
+                        <tr>
+                            <th scope="row" class="mark fit fs-1 font-italic small">{{t.lang_from}} > {{t.lang_to}}</th>
+                            <td class="pl-3">{{t.text_from}}</td>
+                            <td class="pl-3">{{t.text_to}}</td>
+                            <td class="pl-3"> REMEMBER NOTE </td>
+                            <td class="fit">
+                                <form action="phrasebook/{{p.id}}/translation/{{t.id}}/delete" method=
+                                'POST' class="d-inline m-0">
+                                    <button class="badge badge-danger p-1 ml-3 btn">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% endfor %}
+    </ul>
+</div>

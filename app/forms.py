@@ -1,9 +1,14 @@
 """Forms for Travel Translator"""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms import StringField, PasswordField, SelectField, BooleanField, TextAreaField, SelectMultipleField, widgets 
+from wtforms.validators import DataRequired, Length, EqualTo, StopValidation
 
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+    
+    
 
 class UserAddForm(FlaskForm):
     """User registration form."""
@@ -43,9 +48,25 @@ class PhrasebookForm(FlaskForm):
     public = BooleanField("Make public?")
     
     
-class SaveTranslationForm(FlaskForm):
-    """Save translation to user phrasebook."""
     
+    
+    
+# class MultiCheckboxAtLeastOne():
+#     def __init__(self, message=None):
+#         if not message:
+#             message = 'At least one option must be selected.'
+#         self.message = message
+
+#     def __call__(self, form, field):
+#         if len(field.data) == 0:
+#             raise StopValidation(self.message)
+        
+        
+#  validators=[MultiCheckboxAtLeastOne()]
+
+class AddTranslationForm(FlaskForm):
+    """Save translation to user phrasebook."""
+    phrasebooks = MultiCheckboxField("Add to phrasebook(s):", coerce=int)
     
 class NoteForm(FlaskForm):
     """Add / edit user's translation note."""

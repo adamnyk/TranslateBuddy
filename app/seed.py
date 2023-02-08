@@ -10,20 +10,8 @@ db.create_all()
 # If table isn't empty, empty it
 User.query.delete()
 
+
 # Add users
-adam = User(username="Adam", 
-            password="password")
-
-caro = User(username="Carolyn", 
-            password="password")
-
-
-db.session.add(adam)
-db.session.add(caro)
-
-db.session.commit()
-
-# Add real users
 adamnyk = User(username="adamnyk",
                password="$2b$12$nL984KCxBMNZ9XgA9DrY4uz44S48e9x9kJRcqiszoxo.4xwRe2wpK")
 
@@ -38,12 +26,14 @@ db.session.commit()
 # Add phrasebooks
 Phrasebook.query.delete()
 
+food = Phrasebook(name="Food", user_id=1)
+greetings = Phrasebook(name="Greetings", user_id=2)
 convo = Phrasebook(name="Conversation", user_id=1)
-food = Phrasebook(name="Food", user_id=2)
 
 
-db.session.add(convo)
 db.session.add(food)
+db.session.add(greetings)
+db.session.add(convo)
 
 db.session.commit()
 
@@ -59,9 +49,16 @@ cheese = Translation(lang_from='EN-US',
                     text_from='cheese',
                     text_to='queso'
                     )
+que = Translation(lang_from='EN-US',
+                    lang_to='ES',
+                    text_from='what\'s up?',
+                    text_to='¿Qué onda?'
+                    )
+
 
 db.session.add(hello)
 db.session.add(cheese)
+db.session.add(que)
 
 db.session.commit()
 
@@ -76,12 +73,16 @@ caro_hello = PhrasebookTranslation(phrasebook_id=2,
                                    translation_id=1,
                                     note="Caros's hello translation")
 
-caro_cheese = PhrasebookTranslation(phrasebook_id=2,
+adam_cheese = PhrasebookTranslation(phrasebook_id=1,
                                    translation_id=2,
                                    note="Caro's cheese translation")
+adam_que = PhrasebookTranslation(phrasebook_id=3,
+                                   translation_id=3,
+                                   note="Adam's que translation")
 
 db.session.add(adam_hello)
 db.session.add(caro_hello)
-db.session.add(caro_cheese)
+db.session.add(adam_cheese)
+db.session.add(adam_que)
 
 db.session.commit()
