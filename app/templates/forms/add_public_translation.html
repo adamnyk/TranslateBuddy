@@ -1,25 +1,21 @@
-<div class="dropdown d-inline-block mx-3">
+<div class="dropdown d-inline mx-3">
     <a class="btn btn-sm btn-outline-secondary dropdown-toggle"
                             data-toggle="dropdown"
                             href="#"
                             role="button"
                             aria-haspopup="true"
                             aria-expanded="false"
-
                             >+</a>
-      <div class="dropdown-menu dropdown-menu-md-right">
-        <form method="POST" action="translation/add" class="px-4 pt-1">
+      <div class="dropdown-menu dropdown-menu-right">
+        <form method="POST" action="/public/translation/{{t.id}}/add" class="px-4 pt-1">
           <h6 class="dropdown-header">Add to phrasebook:</h6>
         
             {{save_translation_form.hidden_tag()}}
 
 
-
-
             {% for error in save_translation_form.phrasebooks.errors %}
                 <span>{{ error }}</span>
             {% endfor %}
-
 
 
                   
@@ -30,13 +26,14 @@
             </div>
             {% endfor %}
             
+
             <button type="submit" class="btn btn-sm btn-primary">Submit</button>
             
-            
+
           </form>
-          
-        </div>
+        
       </div>
+  </div>
   
   
   

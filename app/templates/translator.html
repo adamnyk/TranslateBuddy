@@ -1,38 +1,40 @@
-<div id="translator">
-    <div class="card bg-light mb-3" style="max-width: 20rem;">
-        
-        <label for="target_lang" class='card-header form-label '>Translate into:
-        </label>
+<div id="translator" class="mt-5">
+	<div class="card bg-light mb-3 " style="max-width: 20rem">
+		<div class="card-body">
+			<form action="/translate" method="POST">
+				{{translate_form.hidden_tag()}}
+				{{translate_form.translate_text(class="form-control mb-2",
+				placeholder=translate_form.translate_text.label.text, cols="40",
+				rows="5", autofocus=true)}}
 
-        <div class="card-body">
+				<div class="d-flex justify-content-between">
+					<div class="d-inline-block">
+						{{translate_form.source_lang.label}} {{translate_form.source_lang}}
+						<br />
+						{{translate_form.target_lang.label}} {{translate_form.target_lang}}
+					</div>
 
-            <form action="/translate" method="POST">
-                {{translate_form.hidden_tag()}}
+					<button type="submit" class="btn btn-primary mt-auto">
+						Translate
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
 
-                {{translate_form.translate_text(class="form-control", 
-                placeholder=translate_form.translate_text.label.text,
-                cols="40", rows="5", autofocus=true)}}
-
-                {{translate_form.target_lang}}
-
-
-                <button type="submit" class="btn btn-primary mt-3">Translate</button>
+	<div>
     
-            </form>
-        </div>
-      </div>
+    {% if session['last_translation'] %}
+		<h3>RESULT:</h3>
+		<div class="d-flex">
+			<span class="h5 ">{{session['last_translation'].text_to}}</span>
+			
 
-      <div>
-        <h1>RESULT:</h1>
-        
-          {% if session['last_translation'] %}
-          <div>
-            <span class="h6">{{session['last_translation'].text_to}}</span> 
-            {% include "/forms/add_translation.html" %}
-        </div>
-          
-          {% endif %}
+				{% include "/forms/add_translation.html" %}
+				{% include "/forms/add_phrasebook.html" %}
+			</div>
+		</div>
 
-    
-      </div>
+		{% endif %}
+	</div>
 </div>

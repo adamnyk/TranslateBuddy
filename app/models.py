@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import auto_delete_orphans
 
 
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
@@ -105,6 +106,10 @@ class Phrasebook(db.Model):
         nullable=False,
     )
 
+    lang_from = db.Column(db.String, nullable=False)
+    
+    lang_to = db.Column(db.String, nullable=False)
+
     translations = db.relationship(
         "Translation",
         secondary="phrasebook_translation",
@@ -156,6 +161,8 @@ class PhrasebookTranslation(db.Model):
 
     note = db.Column(db.Text)
 
+    translation=db.relationship("Translation", back_populates="pb_t", overlaps="phrasebooks,translations")
+    
     def __repr__(self):
         return f"<Phrasebook #{self.phrasebook_id}, Translation #{self.translation_id}>"
 
@@ -189,6 +196,8 @@ class Translation(db.Model):
         db.Text,
         nullable=False,
     )
+
+    pb_t = db.relationship("PhrasebookTranslation", back_populates="translation", overlaps="phrasebooks,translations")
 
     
     def __repr__(self):

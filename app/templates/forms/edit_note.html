@@ -1,0 +1,25 @@
+<div class="dropdown d-inline">
+    <a class=" p-1 py-0 "
+                            data-toggle="dropdown"
+                            data-boundary="window"
+                            href="#"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            ><i class="fa-solid fa-pencil"></i></a>
+
+                            
+    <div class="dropdown-menu dropdown-menu-right">
+        <form method="POST" action="/{{p.id}}/{{t.id}}/note" class="px-4 pt-1 ">
+        
+            {{note_form.hidden_tag()}}
+        
+                  
+            <textarea class="form-group m-0" default="Adam's hello translation" id="note" name="note" placeholder="Note (private)" cols="40", rows="2">{% if a.note %}{{a.note}}{% endif %}</textarea>
+            
+            <div class="pb-5 d-inline"><button type="submit" class="btn btn-sm btn-primary ml-2  ">Save</button></div>
+        </form>        
+
+    </div>
+</div>
+    

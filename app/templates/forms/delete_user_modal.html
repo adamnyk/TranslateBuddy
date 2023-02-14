@@ -1,19 +1,23 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal -->
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header py-0">
           <h1 class="modal-title fs-6" id="exampleModalLabel">Warning!</h1>
-          <button type="button" class="btn-close btn" data-bs-dismiss="modal" aria-label="Close">x</button>
+          <button type="button" class="btn-close btn" data-dismiss="modal" aria-label="Close">x</button>
         </div>
         <div class="modal-body">
           <p>Are you sure you want to delete user: <span class="lead">{{g.user.username}}</span> ?</p>
           <form>
             <button formmethod="POST" formaction="/user/delete" class='btn btn-outline-danger btn-sm ml-5'>Delete User</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary float-right mr-5" data-bs-dismiss="modal" aria-label="Close">No!</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary float-right mr-5" data-dismiss="modal" aria-label="Close">No!</button>
         </form>
+        
         </div>
-
 
       </div>
     </div>
   </div>     
+

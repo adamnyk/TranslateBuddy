@@ -1,28 +1,35 @@
 <div class="dropdown d-inline">
-    <a class="badge badge-info p-1 btn"
-                            data-bs-toggle="dropdown"
+    <a class=" p-1 btn"
+                            data-toggle="dropdown"
                             href="#"
                             role="button"
                             aria-haspopup="true"
                             aria-expanded="false"
-                            >Edit</a>
+                            ><i class="fa-solid fa-pencil"></i></a>
     <div class="dropdown-menu">
         <h6 class="dropdown-header">Edit phrasebook</h6>
 
         <form method="POST" action="phrasebook/{{p.id}}/edit" class="px-4 pt-1">
         
-            {{phrasebook_add_form.hidden_tag()}}
+            {{pb_edit_form.hidden_tag()}}
         
                   
-            {{phrasebook_add_form.name(placeholder="Name", class="form-group d-inline")}}
+            {{pb_edit_form.name(placeholder="Name", class="form-group d-inline", value=p.name)}}
             
+
             <div class="custom-control custom-checkbox mb-2 d-inline-block">
-                {{phrasebook_add_form.public(class="custom-control-input")}}
-                {{phrasebook_add_form.public.label(class="custom-control-label pl-0 ")}}
+                {{pb_edit_form.public(class="custom-control-input", id="pb-"+p.id|string, checked=p.public)}}
+                {{pb_edit_form.public.label(class="custom-control-label pl-0 ", for="pb-"+p.id|string)}}
             </div>
             
-            <button type="submit" class="btn btn-sm btn-primary  ml-2">Add</button>
+            <button type="submit" class="btn btn-sm btn-primary  ml-2">Edit</button>
+            <div class="dropdown-divider "></div>
         </form>        
+
+        
+        <form action="phrasebook/{{p.id}}/delete" method="POST" class="px-4">
+            <button class=" btn btn-sm btn-outline-danger ml-2 my-1"> Delete phrasebook </button>
+        </form>
     </div>
 </div>
     

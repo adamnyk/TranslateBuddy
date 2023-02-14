@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="display-3 d-inline-block">{{g.user.username}}</h1> 
+
+<h1 class="display-5 mt-3  d-inline-block">{{g.user.username}}</h1> 
 
 {% include "forms/user_edit.html" %}
 
-{% include "forms/add_phrasebook.html" %}
+<div class="d-flex  mt-3">
+    <h2 class="d-inline-block ">Phrasebooks</h2>
+    {% include "forms/sort.html" %}
+    {% include "forms/filter.html" %}
+    {% include "forms/add_phrasebook.html" %}
+</div>
 
-{% if g.user.phrasebooks %}
-    {% include "/user/phrasebooks.html" %}
-{% endif %}
+
+<div id="phrasebook-container">
+    {% if g.user.phrasebooks %}
+        {% include "/user/phrasebooks.html" %}
+    {% endif %}
+</div>
 
 
 

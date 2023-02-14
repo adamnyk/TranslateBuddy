@@ -38,7 +38,8 @@ class TranslateForm(FlaskForm):
     """Text translation form."""
 
     translate_text = TextAreaField("Text to translate", validators=[Length(max=100), DataRequired()])
-    target_lang = SelectField("Translate into:", validators=[DataRequired()])
+    target_lang = SelectField("To:", validators=[DataRequired()])
+    source_lang = SelectField("From:", validators=[DataRequired()])
 
 
 class PhrasebookForm(FlaskForm):
@@ -46,31 +47,30 @@ class PhrasebookForm(FlaskForm):
     
     name = StringField("Name", validators=[DataRequired(), Length(max=35)])
     public = BooleanField("Make public?")
+    lang_from = SelectField("From:")
+    lang_to = SelectField("To:")
     
     
+class EditPhrasebookForm(FlaskForm):
+    """Edit phrasebook form."""
     
-    
-    
-# class MultiCheckboxAtLeastOne():
-#     def __init__(self, message=None):
-#         if not message:
-#             message = 'At least one option must be selected.'
-#         self.message = message
+    name = StringField("Name", validators=[DataRequired(), Length(max=35)])
+    public = BooleanField("Make public?") 
 
-#     def __call__(self, form, field):
-#         if len(field.data) == 0:
-#             raise StopValidation(self.message)
-        
-        
-#  validators=[MultiCheckboxAtLeastOne()]
+
+class FilterPhrasebookFrom(FlaskForm):
+    """Form to filter phrasebooks by language."""
+    
+    lang_from = SelectField("From:")
+    lang_to = SelectField("To:")
 
 class AddTranslationForm(FlaskForm):
     """Save translation to user phrasebook."""
     phrasebooks = MultiCheckboxField("Add to phrasebook(s):", coerce=int)
     
+    
 class NoteForm(FlaskForm):
     """Add / edit user's translation note."""
-    
     note = TextAreaField("Note")
 
 

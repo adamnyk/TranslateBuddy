@@ -1,11 +1,12 @@
 <div class="dropdown d-inline-block mx-3">
-  <a class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                          data-bs-toggle="dropdown"
+
+  <a class="text-secondary"
+                          data-toggle="dropdown"
                           href="#"
                           role="button"
                           aria-haspopup="true"
                           aria-expanded="false"
-                          >Edit</a>
+                          ><i class="fa-solid fa-gear "></i></a>
     <div class="dropdown-menu">
       <form method="POST" action="user/edit" class="px-4 pt-1">
         <h6 class="dropdown-header">Edit username</h6>
@@ -24,12 +25,16 @@
           <div class="dropdown-divider "></div>
         </form>
       
+        
         <!-- Modal -->
-        <button type="button" class="btn btn-sm btn-outline-danger mx-4 my-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-sm btn-outline-danger mx-4 my-2" data-toggle="modal" data-target="#exampleModal">
           Delete User
         </button>
-    </div>
-</div>
+        
 
+        
+      </div>
+</div>
+    
 
 

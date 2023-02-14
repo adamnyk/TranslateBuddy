@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class='d-inline'>Public Phrasebooks</h2>
+    <div class="d-inline-block">
+        {% include "forms/sort.html" %}
+        {% include "forms/filter_public.html" %}
+    </div>
+
+    
+    <div id="accordion">
+            
+
+        {% for p in public_pbs |sort(attribute=session["sort_public"])%}
+
+
+            {% if p.user != g.user %}
+        <div>
+                <a 
+                class="btn btn-outline-secondary m-1 mr-2 "
+                href="#phrasebook{{p.id}}" 
+                data-toggle="collapse" 
+                aria-expanded="false" 
+                aria-controls="phrasebook{{p.id}}">
+                {{p.name}}
+                    <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
+                    {% if p.public %}
+                    <i class="fa-solid fa-earth-asia"></i>
+                    {% endif %}
+                    {{p.user.username}}
+                </a>
+
+                {% if p.lang_from %}
+                {% for x,y in g.langs %}
+                    {% if p.lang_from == x %}<span class="badge badge-light">{{y}}</span>
+                    > {% endif %}
+                    {% if p.lang_to == x %}<span class="badge badge-secondary">{{y}}</span>{% endif %}
+                {% endfor %}
+                {% endif %}
+
+        </div>  
+
+        
+        <div class="container collapse " id="phrasebook{{p.id}}" data-parent="#accordion">
+            <div class=" py-2">
+                <table class="table table-sm mb-0 "> 
+                    <tr class="m-0 p-0">
+                        <th scope="col" class="pl-3">Lang</th>
+                        <th scope="col" class="pl-3">From</th>
+                        <th scope="col" class="pl-3">To</th>
+                        <th scope="col" class="pl-3 fit">
+                            <form action="/public/phrasebook/{{p.id}}/add" method="POST">
+                                <button class="btn btn-sm btn-success">Copy phrasebook</button>
+                            </form>
+                        </th>
+                      </tr>
+                    <tbody>
+                        {% for t in p.translations |sort(attribute='id') %}
+                        <tr>
+                            <th scope="row" class="mark fit fs-1 font-italic small"> -> {{t.lang_to}}</th>
+                            <td class="pl-3">{{t.text_from}}</td>
+                            <td class="pl-3">{{t.text_to}}</td>
+                            <td class="p-0 m-0 ">
+                                {% if p.user != g.user %}
+                                {% include "/forms/add_public_translation.html" %}
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}

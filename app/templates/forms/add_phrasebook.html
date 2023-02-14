@@ -1,24 +1,38 @@
-<div class="dropdown">
-    <a class="btn btn-sm btn-outline-success"
-                            data-bs-toggle="dropdown"
+
+
+<div class="dropdown d-inline-block " >
+    <a class="btn btn-sm btn-outline-success d-outline"
+                            data-toggle="dropdown"
                             href="#"
                             role="button"
                             aria-haspopup="true"
                             aria-expanded="false"
+                            data-display="static"
                             >+ Phrasebook</a>
-    <div class="dropdown-menu">
-        <form method="POST" action="phrasebook/add" class="px-4 pt-1">
+    <div class="dropdown-menu dropdown-menu-right dropdown-menu-md-left">
+        <h6 class='dropdown-header my-0 py-0'>New phrasebook</h6>
+        <form method="POST" action="phrasebook/add" class="px-4 pt-1 form-inline">
         
             {{phrasebook_add_form.hidden_tag()}}
         
                   
-            {{phrasebook_add_form.name(placeholder="Name", class="form-group d-inline")}}
+            {{phrasebook_add_form.name(placeholder="Name", class="form-group d-inline mb-2")}}
             
-            <div class="custom-control custom-checkbox mb-2 d-inline-block">
+            {{phrasebook_add_form.lang_from.label(class="mr-1")}}
+            {{phrasebook_add_form.lang_from}}
+
+            {{phrasebook_add_form.lang_to.label(class="mr-3")}}
+            {{phrasebook_add_form.lang_to}}
+
+
+            <div class="custom-control custom-checkbox mb-2  d-inline-block">
                 {{phrasebook_add_form.public(class="custom-control-input")}}
                 {{phrasebook_add_form.public.label(class="custom-control-label pl-0 ")}}
             </div>
             
+
+
+
             <button type="submit" class="btn btn-sm btn-primary  ml-2">Add</button>
         </form>        
     </div>

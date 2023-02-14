@@ -1,0 +1,37 @@
+<div class="dropdown mt-2 ml-2 mr-4 d-inline-block">
+
+    <a class=" text-secondary"
+                            data-toggle="dropdown"
+                            href="#"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            data-display='static'
+                            ><i class="fa-solid fa-filter"></i></a>
+    <div class="dropdown-menu dropdown-menu-right dropdown-menu-md-left">
+        <h6 class='dropdown-header my-0 py-0'>Filter language</h6>
+     
+        <form method="POST" action="/filter" class="px-4 pt-1 form-inline">
+        
+            {{filter_form.hidden_tag()}}
+        
+                  
+            {{filter_form.lang_from.label(class="mr-1")}}
+            {{filter_form.lang_from}}
+            
+            {{filter_form.lang_to.label(class="mr-3")}}
+            {{filter_form.lang_to}}
+
+
+            <button type="submit" class="btn btn-sm btn-primary mt-2">Filter</button>
+
+        </form>    
+
+        <div class="dropdown-divider mt-1"></div>
+        <a  href="/filter" class="dropdown-item">Show all</a>
+
+
+
+    </div>
+</div>
+    

@@ -26,14 +26,20 @@ db.session.commit()
 # Add phrasebooks
 Phrasebook.query.delete()
 
-food = Phrasebook(name="Food", user_id=1)
-greetings = Phrasebook(name="Greetings", user_id=2)
-convo = Phrasebook(name="Conversation", user_id=1)
+food = Phrasebook(name="Food", user_id=1, lang_from='EN', lang_to="ES", public=True)
+convo = Phrasebook(name="Conversation", user_id=1, lang_from='EN', lang_to="ES")
+directions = Phrasebook(name="Directions", user_id=1, lang_from='EN', lang_to="FR", public=True)
+
+greetings = Phrasebook(name="Greetings", user_id=2,  lang_from='EN', lang_to="ES", public=True)
+questions = Phrasebook(name="Questions", user_id=2,  lang_from='EN', lang_to="FR", public=True)
 
 
 db.session.add(food)
-db.session.add(greetings)
 db.session.add(convo)
+db.session.add(directions)
+
+db.session.add(greetings)
+db.session.add(questions)
 
 db.session.commit()
 
@@ -75,7 +81,7 @@ caro_hello = PhrasebookTranslation(phrasebook_id=2,
 
 adam_cheese = PhrasebookTranslation(phrasebook_id=1,
                                    translation_id=2,
-                                   note="Caro's cheese translation")
+                                   note="Adam's cheese translation")
 adam_que = PhrasebookTranslation(phrasebook_id=3,
                                    translation_id=3,
                                    note="Adam's que translation")

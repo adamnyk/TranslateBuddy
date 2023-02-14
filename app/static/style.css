@@ -7,3 +7,20 @@ input {
     white-space: nowrap;
     width: 1%;
 }
+
+body {
+    background-color: antiquewhite;
+}
+
+/* Floating alert */
+/* .alert {
+    z-index: 10;
+    position: fixed;
+    width: 90%;
+    
+    left:50%;
+    transform: translateX(-50%);
+    top:40px;
+  } */
+
+

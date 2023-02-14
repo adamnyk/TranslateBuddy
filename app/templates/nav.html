@@ -4,8 +4,8 @@
         <button
             class="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarColor03"
+            data-toggle="collapse"
+            data-target="#navbarColor03"
             aria-controls="navbarColor03"
             aria-expanded="true"
             aria-label="Toggle navigation"
@@ -13,12 +13,21 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse hidden " id="navbarColor03" style="">
+            
+            {% if g.user %}
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-secondary" href="/public">Public phrasebooks</a>
+                </li>
+            </ul>
+            {% endif %}
+            
             <ul class="navbar-nav ml-auto">
                 
             {% if not g.user %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
-                        data-bs-toggle="dropdown"
+                        data-toggle="dropdown"
                         href="#"
                         role="button"
                         aria-haspopup="true"
@@ -31,7 +40,7 @@
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
-                        data-bs-toggle="dropdown"
+                        data-toggle="dropdown"
                         href="#"
                         role="button"
                         aria-haspopup="true"
@@ -42,6 +51,8 @@
                     </div>
                 </li>
             {% else %}
+                
+
                 <li class="nav-item">
                     <a class="nav-link" href="/user">{{g.user.username}}</a>
                 </li>

@@ -1,51 +1,89 @@
-<div class="container my-4">
-    <h2>Phrasebooks</h2>
 
-    <ul>
-        {% for p in g.user.phrasebooks %}
-        <li>
+<div id="accordion">
+
+
+{% for p in g.user.phrasebooks |sort(attribute=session['sort'])%}
+{% if not session['filter'] or session['filter'] and p.lang_to == session['filter'] %}
+
+
+    
+    <div>
             <a 
-            class="btn btn-outline-secondary m-1 mr-4 "
+            class="btn btn-outline-secondary m-1 mr-2 "
             href="#phrasebook{{p.id}}" 
-            data-bs-toggle="collapse" 
+            data-toggle="collapse" 
             aria-expanded="false" 
             aria-controls="phrasebook{{p.id}}">
             {{p.name}}
-            <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
+                <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
+                {% if p.public %}
+                <i class="fa-solid fa-earth-asia"></i>
+                {% endif %}
             </a>
+            {% include "forms/edit_phrasebook.html"  %}
+            
+            {% if p.lang_from %}
+                {% for x,y in g.langs %}
+                    {% if p.lang_to == x %}<span class="badge badge-secondary">{{y}}</span>{% endif %}
+                {% endfor %}
+            {% endif %}
 
+            
+    </div>  
 
+    
+    <div class="container collapse " id="phrasebook{{p.id}}" data-parent="#accordion">
+        <div class=" py-2">
+            <table class="table table-sm mb-0 "> 
+                <tr class="m-0 p-0">
+                    <th scope="col" class="pl-3">Lang</th>
+                    <th scope="col" class="pl-3">From</th>
+                    <th scope="col" class="pl-3">To</th>
+                    <th scope="col" class="pl-3">Note</th>
+                    <th scope="col" class="pl-3"></th>
+                    </tr>
+                <tbody>
+                    {% for t in p.translations |sort(attribute='id') %}
+                    <tr>
+                        <th scope="row" class="mark fit fs-1 font-italic small"> -> {{t.lang_to}}</th>
+                        <td class="pl-3">{{t.text_from}}</td>
+                        <td class="pl-3">{{t.text_to}}</td>
+                        <td class="pl-3"> 
+                            {% for a in t.pb_t %}
+                                {% if a.phrasebook_id == p.id %}
+                                    {% if a.note %}
+                                        {{a.note}}
+                                    {% endif %}
+                                    {% include "/forms/edit_note.html" %}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td class="p-0 m-0 fit">
+                            <form action="phrasebook/{{p.id}}/translation/{{t.id}}/delete" method=
+                            'POST' class="d-inline m-0 p-0">
 
-            {% include "forms/edit_phrasebook.html" %}
+                                <button class="btn-link pt-1 pb-0 ml-3 btn"><i class="fa-regular fa-trash-can text-danger"></i></button>
+                            </form>
+                        </td>
+                    </tr>
 
-            <form action="phrasebook/{{p.id}}/delete" method="POST" class="d-inline">
-                <button class=" badge badge-danger p-1 m-2 btn"> Delete </button>
-            </form>
-        </li>  
-
-        <div class="container collapse " id="phrasebook{{p.id}}">
-            <div class=" py-2">
-                <table class="table table-sm mb-0"> 
-                    <tbody>
-                        {% for t in p.translations %}
-                        <tr>
-                            <th scope="row" class="mark fit fs-1 font-italic small">{{t.lang_from}} > {{t.lang_to}}</th>
-                            <td class="pl-3">{{t.text_from}}</td>
-                            <td class="pl-3">{{t.text_to}}</td>
-                            <td class="pl-3"> REMEMBER NOTE </td>
-                            <td class="fit">
-                                <form action="phrasebook/{{p.id}}/translation/{{t.id}}/delete" method=
-                                'POST' class="d-inline m-0">
-                                    <button class="badge badge-danger p-1 ml-3 btn">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        {% endfor %}
-    </ul>
+
+
+
+
+
+{% endif %}
+{% endfor %} 
+
+
+
+    
 </div>
+
+
