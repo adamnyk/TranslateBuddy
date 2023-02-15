@@ -389,7 +389,91 @@ def delete_phrasebook(pb_id):
     return redirect("/user")   
 
 ####################################################################################
-# Sort / Filter Routes
+# Public Phrasebook Routes
+
+@app.route('/public')
+def show_public_phrasebooks():
+    """Show public phrasebooks from all users."""
+
+
+    if not g.user: return unauthorized()
+    reset_filter()
+         
+    save_translation_form = AddTranslationForm()
+    save_translation_form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
+    
+    public_pbs = Phrasebook.query.filter(Phrasebook.public==True, 
+                                         Phrasebook.user_id!=g.user.id).all()
+
+    # Creating sets of languages for use in phrasebook filter. 
+    codes_from = list({pb.lang_from for pb in public_pbs})
+    codes_to = list({pb.lang_to for pb in public_pbs})
+    
+    choices_from = [(x,y) for x,y in source_languages if x in codes_from]
+    choices_to = [(x,y) for x,y in source_languages if x in codes_to]
+    
+    
+    filter_form = FilterPhrasebookFrom()
+    filter_form.lang_from.choices = choices_from
+    filter_form.lang_to.choices = choices_to
+    
+    if 'filter_public_from' and "filter_public_to" in session:
+        public_pbs = Phrasebook.query.filter_by(public=True,
+                                            lang_from=session['filter_public_from'],
+                                            lang_to=session['filter_public_to'])
+        
+
+    return render_template("show_public.html", public_pbs=public_pbs, save_translation_form=save_translation_form, filter_form=filter_form)
+
+@app.route('/public/translation/<int:t_id>/add', methods=["POST"])
+def add_public_translation(t_id):
+    """Add translation from a public phrasebooks to a user's phrasebook"""
+    
+    if not g.user: return unauthorized()
+    
+    form = AddTranslationForm()
+    form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
+    
+    if not form.phrasebooks.data:
+        flash("No data submitted", "danger")
+        return redirect("/public")
+    
+    if form.validate_on_submit():
+        t = Translation.query.get_or_404(t_id)
+        
+        for pb_id in form.phrasebooks.data:
+            pb = Phrasebook.query.get(pb_id)
+            pb.translations.append(t)
+            db.session.commit()
+
+        flash(f"Translation saved to {pb.name}", "success")
+        return redirect("/public")
+    
+    
+@app.route('/public/phrasebook/<int:pb_id>/add', methods=["POST"])
+def add_public_phrasebook(pb_id):
+    """Copy a public phrasebook to the current user's profile."""
+    
+    if not g.user: return unauthorized()
+    
+    pb = pb = Phrasebook.query.get_or_404(pb_id)
+    
+    new_pb = Phrasebook(name = pb.name,
+                        user_id = g.user.id,
+                        lang_from = pb.lang_from,
+                        lang_to = pb.lang_to)
+    
+    for t in pb.translations:
+        new_pb.translations.append(t)
+        
+    db.session.add(new_pb)
+    db.session.commit()
+    
+    flash(f"Phrasebook {pb.name} copied successfully.", "success")
+    return redirect("/public")
+
+####################################################################################
+# Sort / Filter Phrasebook Routes
 
 @app.route('/sort/<sort_by>')
 def sort_phrasebook(sort_by):
@@ -445,11 +529,13 @@ def filter_public_phrasebook():
         session['filter_public_from'] = form.lang_from.data
         session['filter_public_to'] = form.lang_to.data
         
-        flash("sort applied", "success")
+        flash(f"Filter applied.  {form.lang_from.data} -> {form.lang_to.data}", "success")
     else:
         flash("sort failed.", "danger")
     
     return redirect(request.referrer)
+
+
 ####################################################################################
 # Translation Routes
 
@@ -522,87 +608,7 @@ def delete_translation(pb_id, t_id):
     return redirect(request.referrer)
 
 
-####################################################################################
-# Public Phrasebook Routes
 
-@app.route('/public')
-def show_public_phrasebooks():
-    """Show public phrasebooks from all users."""
-
-
-    if not g.user: return unauthorized()
-    reset_filter()
-         
-    save_translation_form = AddTranslationForm()
-    save_translation_form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
-    
-    public_pbs = Phrasebook.query.filter(Phrasebook.public==True, 
-                                         Phrasebook.user_id!=g.user.id).all()
-
-    # Creating sets of languages for use in phrasebook filter. 
-    codes_from = list({pb.lang_from for pb in public_pbs})
-    codes_to = list({pb.lang_to for pb in public_pbs})
-    
-    choices_from = [(x,y) for x,y in source_languages if x in codes_from]
-    choices_to = [(x,y) for x,y in source_languages if x in codes_to]
-    
-    
-    filter_form = FilterPhrasebookFrom()
-    filter_form.lang_from.choices = choices_from
-    filter_form.lang_to.choices = choices_to
-    
-    if 'filter_public_from' and "filter_public_to" in session:
-        public_pbs = Phrasebook.query.filter_by(public=True,
-                                            lang_from=session['filter_public_from'],
-                                            lang_to=session['filter_public_to'])
-        
-
-    return render_template("show_public.html", public_pbs=public_pbs, save_translation_form=save_translation_form, filter_form=filter_form)
-
-@app.route('/public/translation/<int:t_id>/add', methods=["POST"])
-def add_public_translation(t_id):
-    """Add translation from a public phrasebooks to a user's phrasebook"""
-    
-    if not g.user: return unauthorized()
-    
-    form = AddTranslationForm()
-    form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
-    
-    if not form.phrasebooks.data:
-        flash("No data submitted", "danger")
-        return redirect("/public")
-    
-    if form.validate_on_submit():
-        t = Translation.query.get_or_404(t_id)
-        
-        for pb_id in form.phrasebooks.data:
-            pb = Phrasebook.query.get(pb_id)
-            pb.translations.append(t)
-            db.session.commit()
-
-        flash(f"Translation saved to {pb.name}", "success")
-        return redirect("/public")
-    
-    
-@app.route('/public/phrasebook/<int:pb_id>/add', methods=["POST"])
-def add_public_phrasebook(pb_id):
-    """Copy a public phrasebook to the current user's profile."""
-    
-    if not g.user: return unauthorized()
-    
-    pb = pb = Phrasebook.query.get_or_404(pb_id)
-    
-    new_pb = Phrasebook(name = pb.name,
-                        user_id = g.user.id)
-    
-    for t in pb.translations:
-        new_pb.translations.append(t)
-        
-    db.session.add(new_pb)
-    db.session.commit()
-    
-    flash(f"Phrasebook {pb.name} copied successfully.", "success")
-    return redirect("/public")
 
 
 

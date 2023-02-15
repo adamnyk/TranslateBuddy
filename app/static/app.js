@@ -1,3 +1,10 @@
+$(".dropdown").on("click", ".dropdown-menu", function (e) {
+		e.stopPropagation();
+		
+		});
+		
+
+
 // Stop bubbling for dropdown menu forms
 $(".dropdown-menu").click(function (e) {
 	e.stopPropagation();
@@ -5,18 +12,6 @@ $(".dropdown-menu").click(function (e) {
         $($(e.target).data('target')).modal()
     }
 });
-
-// ///////////////////////////////////////////////
-// //** Phrasebook Sort */
-// $("a#nameSort").bind("click", function() {
-//     Cookies.set("sort", "name");
-// });
-// $("a#langSort").bind("click", function() {
-//     Cookies.set("sort", "language");
-// });
-// $("a#idSort").bind("click", function() {
-//     Cookies.set("sort", "id");
-// });
 
 
 ///////////////////////////////////////////////
@@ -52,9 +47,3 @@ if (currentPath !== "/user") {
     Cookies.remove("activeAccordionGroup");
 }
 
-
-
-// let $myGroup = $('#myGroup');
-// $myGroup.on('show.bs.collapse','.collapse', function() {
-// $myGroup.find('.collapse.show').collapse('hide');
-// });

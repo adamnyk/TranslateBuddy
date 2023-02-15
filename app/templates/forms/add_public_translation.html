@@ -21,8 +21,8 @@
                   
             {% for p in save_translation_form.phrasebooks %}
             <div class="custom-control custom-checkbox mb-2 ">
-              {{ p(class="custom-control-input") }}
-              {{p.label(class="custom-control-label")}}
+              {{ p(class="custom-control-input", id=p.id+"_t-"+t.id|string) }}
+              {{p.label(class="custom-control-label", for=p.id+"_t-"+t.id|string)}}
             </div>
             {% endfor %}
             
