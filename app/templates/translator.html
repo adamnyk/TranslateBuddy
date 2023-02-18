@@ -1,5 +1,9 @@
-<div id="translator" class="mt-5">
+<div id="translator" class="mt-4">
+	{% if not g.user %}
+<p class=' mb-1 ml-2'>Login or register to view and create phrasebooks!</p>
+{% endif %}
 	<div class="card bg-light mb-3 " style="max-width: 20rem">
+		
 		<div class="card-body">
 			<form action="/translate" method="POST">
 				{{translate_form.hidden_tag()}}
@@ -26,12 +30,15 @@
     
     {% if session['last_translation'] %}
 		<h3>RESULT:</h3>
+
+		
 		<div class="d-flex">
 			<span class="h5 ">{{session['last_translation'].text_to}}</span>
 			
-
-				{% include "/forms/add_translation.html" %}
+			{% if g.user %}
+				{% include "/forms/add_translation.html" %}	
 				{% include "/forms/add_phrasebook.html" %}
+			{% endif %}
 			</div>
 		</div>
 
