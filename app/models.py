@@ -210,7 +210,7 @@ class Translation(db.Model):
             db.session.delete(self)
 
     def to_dict(self):
-        """Serialize """
+        """Serialize SQLalchemy translation object into dictionary for storage in flask session. """
         dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
         
         return dict

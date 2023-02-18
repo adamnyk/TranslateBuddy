@@ -32,10 +32,10 @@ target_languages = [(l.code, l.name) for l in translator.get_target_languages()]
 ##############################################################################
 # Translation functions
 
-def get_translation(text, target_lang):
+def get_translation(text, source_lang, target_lang):
     """Fetches translation data from API and creates a new Translation object."""
-    result = translator.translate_text(text, target_lang=target_lang)
-    translation = Translation(lang_from=result.detected_source_lang,
+    result = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
+    translation = Translation(lang_from=source_lang,
                             lang_to=target_lang,
                             text_from=text,
                             text_to=result.text)
@@ -43,7 +43,7 @@ def get_translation(text, target_lang):
     return translation
 
 ##############################################################################
-# User signup/login/logout
+# Before request
 
 @app.before_request
 def add_user_to_g():
@@ -73,6 +73,9 @@ def set_default_sort():
     if "sort_public" not in session:
         session["sort_public"] = "id"
 
+
+##############################################################################
+# User signup/login/logout
 def clear_translation():
     """Clear translation from session."""
     
@@ -98,7 +101,6 @@ def reset_filter():
             del session['filter_public_to']
         
         
-        
 def find_existing_translation(translation):
     """Given a translation, find an existing translation with the same information.
     If translation exists, return it, otherwise return None."""
@@ -118,6 +120,9 @@ def unauthorized():
     flash("Access unauthorized.", "danger")
     return redirect("/")
 
+
+##############################################################################
+# User signup/login/logout
 def do_login(user):
     """Log in user."""
 
@@ -207,6 +212,7 @@ def logout():
 @app.route('/')
 def home():
 
+
     login_form = LoginForm()
     register_form = UserAddForm()
     
@@ -221,6 +227,8 @@ def home():
     translate_form.source_lang.choices = source_languages
     
     save_translation_form = AddTranslationForm()
+    
+    
     if g.user:
         save_translation_form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
         
@@ -243,16 +251,18 @@ def translate():
 
     if form.validate_on_submit():
         
-        translation = get_translation(form.translate_text.data, form.target_lang.data)
+        translation = get_translation(form.translate_text.data, 
+                                      form.source_lang.data, 
+                                      form.target_lang.data)
 
         session["lang_from"] = form.source_lang.data
         session["lang_to"] = translation.lang_to
         session["last_translation"] = translation.to_dict()
 
-        return redirect(request.referrer)
+        return redirect("/")
     
     flash("Translation did not submit", 'danger')
-    return redirect(request.referrer)
+    return redirect("/")
 
 
 ####################################################################################
@@ -440,7 +450,7 @@ def add_public_translation(t_id):
     
     if form.validate_on_submit():
         t = Translation.query.get_or_404(t_id)
-        
+
         for pb_id in form.phrasebooks.data:
             pb = Phrasebook.query.get(pb_id)
             pb.translations.append(t)
@@ -544,6 +554,7 @@ def add_translation():
     """Add translation to database and add association to one or more phrasebooks."""
     
     if not g.user: return unauthorized()
+    
     form = AddTranslationForm()
     form.phrasebooks.choices = [(p.id, p.name) for p in g.user.phrasebooks]
 
@@ -552,8 +563,6 @@ def add_translation():
         return redirect("/")
     
     if form.validate_on_submit:
-    
-    
         new_translation = Translation(**session["last_translation"])
         
         if  not find_existing_translation(new_translation):
