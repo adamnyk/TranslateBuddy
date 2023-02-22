@@ -75,7 +75,7 @@ def set_default_sort():
 
 
 ##############################################################################
-# User signup/login/logout
+# Helper functions
 def clear_translation():
     """Clear translation from session."""
     
@@ -121,8 +121,7 @@ def unauthorized():
     return redirect("/")
 
 
-##############################################################################
-# User signup/login/logout
+
 def do_login(user):
     """Log in user."""
 
@@ -136,6 +135,8 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
+##############################################################################
+# User signup/login/logout
 
 @app.route('/signup', methods=["POST"])
 def signup():
@@ -149,7 +150,6 @@ def signup():
         del session[CURR_USER_KEY]
     
     register_form = UserAddForm()
-    login_form = LoginForm()
     
     if register_form.validate_on_submit():
         try:
@@ -168,9 +168,12 @@ def signup():
         flash("Welcome! Account created.", 'success')
         return redirect("/")
 
-    flash("Reigistration failed!", 'danger')
+    if register_form.password_confirm.data != register_form.password.data:
+        flash("Registration failed: Passwords must match.", "danger")
+    else:
+        flash("Reigistration failed!", 'danger')
             
-    return render_template("home.html", register_form=register_form, login_form=login_form)
+    return redirect("/")
 
 
 @app.route('/login', methods=["POST"])
@@ -202,7 +205,7 @@ def logout():
     reset_sort()
 
 
-    flash("You have successfully logged out.", 'success')
+    flash("Goodbye!", 'success')
     return redirect("/")
 
 
@@ -372,6 +375,8 @@ def edit_phrasebook(pb_id):
 
     if not g.user: return unauthorized()
     
+    if pb_id not in {p.id for p in g.user.phrasebooks}: return unauthorized()
+    
     form = EditPhrasebookForm()
     
     if form.validate_on_submit():
@@ -381,7 +386,7 @@ def edit_phrasebook(pb_id):
         
         db.session.commit()
         
-        flash(f"Phrasebook updated.", "success")
+        flash(f"Phrasebook updated.","success")
         return redirect("/user")
     
     flash("Phrasebook edit unsuccessful.", "danger")
@@ -396,6 +401,7 @@ def delete_phrasebook(pb_id):
     pb.delete()
     db.session.commit()
 
+    flash("Phrasebook deleted.","success")
     return redirect("/user")   
 
 ####################################################################################
@@ -461,7 +467,7 @@ def add_public_translation(t_id):
     
     
 @app.route('/public/phrasebook/<int:pb_id>/add', methods=["POST"])
-def add_public_phrasebook(pb_id):
+def copy_public_phrasebook(pb_id):
     """Copy a public phrasebook to the current user's profile."""
     
     if not g.user: return unauthorized()
@@ -576,8 +582,8 @@ def add_translation():
             pb.translations.append(new_translation)
             db.session.commit()
 
-        flash(f"Translation saved to {pb.name}", "success")
-        return redirect(request.referrer)
+        flash(f"Translation saved.", "success")
+        return redirect("/")
     
     else:
         flash("Form did not validate.", "danger")
@@ -596,7 +602,7 @@ def edit_translation_note(pb_id, t_id):
         pb_t.note = form.note.data
     
         db.session.commit()
-        return redirect(request.referrer)
+        return redirect("/user")
     
     flash("Note submission failed.", "danger")
     return redirect(request.referrer)
@@ -614,7 +620,7 @@ def delete_translation(pb_id, t_id):
     db.session.commit()
     
     flash("Translation deleted.", "warning")
-    return redirect(request.referrer)
+    return redirect("/user")
 
 
 
@@ -626,8 +632,8 @@ def delete_translation(pb_id, t_id):
 ########
 
 ####### Translate
-# result = translator.translate_text("Hello, wild one!", target_lang="FR")
-# print(result.text)  # "Bonjour, le monde !"
+# result = translator.translate_text("Hello world!", target_lang="FR")
+# print(result.text)  # "Bonjour le monde !"
     
 
 ####### Translate Document
