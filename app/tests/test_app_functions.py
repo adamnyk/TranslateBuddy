@@ -13,7 +13,7 @@ from models import db, User, Phrasebook, Translation, PhrasebookTranslation
 os.environ["DATABASE_URL"] = "postgresql:///translator-test"
 
 
-from app import app, CURR_USER_KEY, get_translation
+from app import app, CURR_USER_KEY, get_translation, do_login, do_logout
 
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['TESTING'] = True
@@ -24,7 +24,7 @@ with app.app_context():
     db.create_all()
 
 
-class ViewsTestCase(TestCase):
+class FunctionsTestCase(TestCase):
     """Testing attributes of User model."""
 
     def setUp(self):
@@ -168,3 +168,35 @@ class ViewsTestCase(TestCase):
         self.assertEqual(translation.lang_from, "EN")
         self.assertEqual(translation.lang_to, "ES")
         self.assertIsInstance(translation, Translation)
+        
+    def test_do_login(self):
+        """Function should add user id to session."""
+    
+        with self.client as c:
+            c.get("/")
+            self.assertIsNone(session.get(CURR_USER_KEY))
+            
+            do_login(self.u1)
+            self.assertEqual(session[CURR_USER_KEY], self.uid1)
+            
+        
+    def test_do_logout(self):
+        """Function should remove user id from session if it is in the session."""
+        
+        with self.client as c:
+                c.get("/")
+                # if session[CURR_USER_KEY] is None
+                self.assertIsNone(session.get(CURR_USER_KEY))
+                do_logout()
+                self.assertIsNone(session.get(CURR_USER_KEY))
+                
+                # if logged in
+                with c.session_transaction() as sess:
+                 sess[CURR_USER_KEY] = self.uid1
+                
+                c.get("/")
+                self.assertEqual(self.uid1, session.get(CURR_USER_KEY))
+                do_logout()
+                self.assertIsNone(session.get(CURR_USER_KEY))
+                
+                
