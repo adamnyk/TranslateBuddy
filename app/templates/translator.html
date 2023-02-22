@@ -26,22 +26,24 @@
 		</div>
 	</div>
 
-	<div>
+
     
     {% if session['last_translation'] %}
-		<h3>RESULT:</h3>
-
 		
-		<div class="d-flex">
-			<span class="h5 ">{{session['last_translation'].text_to}}</span>
+	<h3>RESULT:</h3>
+	
+	<div class="card bg-light mb-3 p-3 d-inline-block" >
+			<div class="d-flex">
+				<span class="h5 ">{{session['last_translation'].text_to}}</span>
 			
-			{% if g.user %}
-				{% include "/forms/add_translation.html" %}	
-				{% include "/forms/add_phrasebook.html" %}
-			{% endif %}
+				{% if g.user %}
+					{% include "/forms/add_translation.html" %}
+					{% include "/forms/add_phrasebook.html" %}
+				{% endif %}
+				</div>
 			</div>
 		</div>
 
-		{% endif %}
-	</div>
+	{% endif %}
+
 </div>
