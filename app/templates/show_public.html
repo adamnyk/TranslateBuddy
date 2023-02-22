@@ -18,7 +18,7 @@
             {% if p.user != g.user %}
         <div>
                 <a 
-                class="btn btn-outline-secondary m-1 mr-2 "
+                class="btn btn-outline-secondary pb-button m-1 mr-2 "
                 href="#phrasebook{{p.id}}" 
                 data-toggle="collapse" 
                 aria-expanded="false" 
@@ -46,7 +46,7 @@
             <div class=" py-2">
                 <table class="table table-sm mb-0 "> 
                     <tr class="m-0 p-0">
-                        <th scope="col" class="pl-3">Lang</th>
+                        
                         <th scope="col" class="pl-3">From</th>
                         <th scope="col" class="pl-3">To</th>
                         <th scope="col" class="pl-3 fit">
@@ -58,9 +58,9 @@
                     <tbody>
                         {% for t in p.translations |sort(attribute='id') %}
                         <tr>
-                            <th scope="row" class="mark fit fs-1 font-italic small"> -> {{t.lang_to}}</th>
-                            <td class="pl-3">{{t.text_from}}</td>
-                            <td class="pl-3">{{t.text_to}}</td>
+                            
+                            <td class="pl-3 from">{{t.text_from}}</td>
+                            <td class="pl-3 to">{{t.text_to}}</td>
                             <td class="p-0 m-0 ">
                                 {% if p.user != g.user %}
                                 {% include "/forms/add_public_translation.html" %}

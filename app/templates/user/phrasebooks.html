@@ -9,7 +9,7 @@
     
     <div>
             <a 
-            class="btn btn-outline-secondary m-1 mr-2 "
+            class="btn btn-outline-secondary m-1 mr-2 pb-button"
             href="#phrasebook{{p.id}}" 
             data-toggle="collapse" 
             aria-expanded="false" 
@@ -17,7 +17,7 @@
             {{p.name}}
                 <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
                 {% if p.public %}
-                <i class="fa-solid fa-earth-asia"></i>
+                <i class="fa-solid fa-earth-asia public-globe"></i>
                 {% endif %}
             </a>
             {% include "forms/edit_phrasebook.html"  %}
@@ -36,7 +36,7 @@
         <div class=" py-2">
             <table class="table table-sm mb-0 "> 
                 <tr class="m-0 p-0">
-                    <th scope="col" class="pl-3">Lang</th>
+
                     <th scope="col" class="pl-3">From</th>
                     <th scope="col" class="pl-3">To</th>
                     <th scope="col" class="pl-3">Note</th>
@@ -45,9 +45,9 @@
                 <tbody>
                     {% for t in p.translations |sort(attribute='id') %}
                     <tr>
-                        <th scope="row" class="mark fit fs-1 font-italic small"> -> {{t.lang_to}}</th>
-                        <td class="pl-3">{{t.text_from}}</td>
-                        <td class="pl-3">{{t.text_to}}</td>
+
+                        <td class="pl-3 from">{{t.text_from}}</td>
+                        <td class="pl-3 to">{{t.text_to}}</td>
                         <td class="pl-3"> 
                             {% for a in t.pb_t %}
                                 {% if a.phrasebook_id == p.id %}
