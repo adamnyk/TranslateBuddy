@@ -16,15 +16,15 @@ class UserAddForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(min=6)])
     password = PasswordField("Password", validators=[Length(min=6)])
     password_confirm = PasswordField(
-        "Confirm Password", validators=[EqualTo("password")]
+        "Confirm Password", validators=[DataRequired(), EqualTo("password")]
     )
 
 
 class UserEditForm(FlaskForm):
     """User edit from."""
 
-    username = StringField("New username", validators=[DataRequired()])
-    password = PasswordField("Confirm password", validators=[Length(min=6)])
+    username = StringField("New username", validators=[DataRequired(), Length(min=6)])
+    password = PasswordField("Confirm password", validators=[DataRequired(),Length(min=6)])
 
 
 class LoginForm(FlaskForm):
