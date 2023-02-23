@@ -267,7 +267,13 @@ def translate():
     flash("Translation did not submit", 'danger')
     return redirect("/")
 
-
+    
+@app.route("/clear")
+def clear_translation():
+    if "last_translation" in session:
+        del session['last_translation']
+        
+    return redirect("/")
 ####################################################################################
 # User Routes
 
@@ -625,24 +631,3 @@ def delete_translation(pb_id, t_id):
 
 
 
-
-
-######## 
-# API demo
-########
-
-####### Translate
-# result = translator.translate_text("Hello world!", target_lang="FR")
-# print(result.text)  # "Bonjour le monde !"
-    
-
-####### Translate Document
-# result = translator.translate_document_from_filepath(input_path="phrases.txt", output_path="result.txt", target_lang="FR")
-# print(result.text)  # "Bonjour, le monde !"
-
-###### Attempting to create cheet-sheet
-# with open('phrases.txt') as f1, open('result.txt') as f2:
-#     for l1, l2 in zip(f1,f2):
-#         print(l1 + '          ' + l2)
-
-###################################################################################
