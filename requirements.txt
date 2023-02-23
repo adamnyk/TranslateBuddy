@@ -1,7 +1,7 @@
 appnope==0.1.0
 backcall==0.1.0
-beautifulsoup4==4.11.2 
 bcrypt==3.1.4
+beautifulsoup4==4.11.2
 black==22.12.0
 blinker==1.4
 certifi==2022.12.7
@@ -19,6 +19,7 @@ Flask-DebugToolbar==0.10.1
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
 greenlet==2.0.1
+gunicorn==20.1.0
 idna==3.4
 importlib-metadata==6.0.0
 infinity==1.5
