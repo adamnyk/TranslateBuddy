@@ -16,28 +16,29 @@
 
 
             {% if p.user != g.user %}
-        <div>
-                <a 
+        <div class="row">
+            <div class="col-7 col-md-6 col-lg-5">
+                <a
                 class="btn btn-outline-secondary pb-button m-1 mr-2 "
-                href="#phrasebook{{p.id}}" 
-                data-toggle="collapse" 
-                aria-expanded="false" 
+                href="#phrasebook{{p.id}}"
+                data-toggle="collapse"
+                aria-expanded="false"
                 aria-controls="phrasebook{{p.id}}">
                 {{p.name}}
                     <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
-                    {% if p.public %}
-                    <i class="fa-solid fa-earth-asia"></i>
-                    {% endif %}
-                    {{p.user.username}}
+                    <small>{{p.user.username}}</small>
                 </a>
+                </div>
 
-                {% if p.lang_from %}
+            {% if p.lang_from %}
+            <div class="col-5 col-md-6 col-lg-7">
                 {% for x,y in g.langs %}
                     {% if p.lang_from == x %}<span class="badge badge-light">{{y}}</span>
                     > {% endif %}
                     {% if p.lang_to == x %}<span class="badge badge-secondary">{{y}}</span>{% endif %}
                 {% endfor %}
-                {% endif %}
+            </div>
+            {% endif %}
 
         </div>  
 

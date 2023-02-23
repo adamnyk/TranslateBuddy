@@ -2,30 +2,35 @@
 <div id="accordion">
 
 
+
 {% for p in g.user.phrasebooks |sort(attribute=session['sort'])%}
 {% if not session['filter'] or session['filter'] and p.lang_to == session['filter'] %}
 
 
     
-    <div>
-            <a 
-            class="btn btn-outline-secondary m-1 mr-2 pb-button"
-            href="#phrasebook{{p.id}}" 
-            data-toggle="collapse" 
-            aria-expanded="false" 
-            aria-controls="phrasebook{{p.id}}">
-            {{p.name}}
-                <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
-                {% if p.public %}
-                <i class="fa-solid fa-earth-asia public-globe"></i>
-                {% endif %}
-            </a>
-            {% include "forms/edit_phrasebook.html"  %}
+    <div class="row">
+            <div class="col-9 col-md-7 col-lg-5 col-xl-4">
+                <a
+                class="btn btn-outline-secondary m-1 mr-2 pb-button"
+                href="#phrasebook{{p.id}}"
+                data-toggle="collapse"
+                aria-expanded="false"
+                aria-controls="phrasebook{{p.id}}">
+                {{p.name}}
+                    <span class="badge badge-primary badge-pill ml-2">{{p.translations | length}}</span>
+                    {% if p.public %}
+                    <i class="fa-solid fa-earth-asia public-globe"></i>
+                    {% endif %}
+                </a>
+                {% include "forms/edit_phrasebook.html"  %}
+            </div>
             
             {% if p.lang_from %}
-                {% for x,y in g.langs %}
-                    {% if p.lang_to == x %}<span class="badge badge-secondary">{{y}}</span>{% endif %}
-                {% endfor %}
+            <div class="col-3 col-md-5 col-lg-7 col-xl-8">
+                    {% for x,y in g.langs %}
+                        {% if p.lang_to == x %}<span class="badge badge-secondary">{{y}}</span>{% endif %}
+                    {% endfor %}
+            </div>
             {% endif %}
 
             

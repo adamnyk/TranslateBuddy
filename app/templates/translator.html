@@ -30,19 +30,21 @@
     
     {% if session['last_translation'] %}
 		
-	<h3>RESULT:</h3>
+	<h3>RESULT:</h3> 
 	
-	<div class="card bg-light mb-3 p-3 d-inline-block" >
-			<div class="d-flex">
-				<span class="h5 ">{{session['last_translation'].text_to}}</span>
-			
-				{% if g.user %}
-					{% include "/forms/add_translation.html" %}
-					{% include "/forms/add_phrasebook.html" %}
-				{% endif %}
-				</div>
-			</div>
+	<div class="card bg-light mb-3 p-3 d-inline-block position-relative" >
+
+		<a href="/clear" class="btn btn-close text-right position-absolute p-0" style="right: 5px; top:0">x</a>
+		<span class="h5">{{session['last_translation'].text_to}}</span>
+	
+		<div class="d-block mt-1 text-right">
+		{% if g.user %}
+		{% include "/forms/add_translation.html" %}
+		{% include "/forms/add_phrasebook.html" %}
+		{% endif %}
 		</div>
+		
+	</div>
 
 	{% endif %}
 
