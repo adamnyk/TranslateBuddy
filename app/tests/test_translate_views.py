@@ -115,3 +115,18 @@ class ViewsTestCase(TestCase):
                 self.assertIsNone(session['last_translation']['id'])
                 
 
+    def test_clear_translation(self):
+        """Does route clear homepage translation result?"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess["last_translation"] = {"id": None,
+                                            "lang_from": "EN",
+                                            "lang_to": "ES",
+                                            "text_from": "Hello world!",
+                                            "text_to": "¡Hola mundo!"}
+            resp = c.get("/")
+            self.assertIn("Hola mundo!", str(resp.data))
+            
+            resp = c.get("/clear", follow_redirects=True) 
+            self.assertNotIn("Hola mundo!", str(resp.data))
+            self.assertIsNone(session.get("last_translation"))
