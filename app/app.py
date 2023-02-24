@@ -7,6 +7,8 @@ import deepl
 try:
     from secret import API_AUTH_KEY, SESSION_KEY
 except ImportError:
+    API_AUTH_KEY = None
+    SESSION_KEY = None
     print('Secret file not found.')
 
 import os
