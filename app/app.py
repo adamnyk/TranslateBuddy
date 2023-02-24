@@ -4,7 +4,7 @@ from models import db, connect_db, User, Translation, Phrasebook, PhrasebookTran
 from forms import LoginForm, UserAddForm, TranslateForm, UserEditForm, PhrasebookForm, AddTranslationForm, NoteForm, EditPhrasebookForm, FilterPhrasebookFrom
 from sqlalchemy.exc import IntegrityError
 import deepl
-from secret import API_AUTH_KEY, SESSION_KEY
+# from secret import API_AUTH_KEY, SESSION_KEY
 
 import os
 
@@ -17,7 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', SESSION_KEY)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY'
+                                        #   , SESSION_KEY
+                                          )
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
