@@ -24,7 +24,9 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
-API_AUTH_KEY = "66e75cdc-44f8-9b52-e8a4-8dea7a82ae6c:fx"
+API_AUTH_KEY = os.environ.get("API_AUTH_KEY"
+                            #   , API_AUTH_KEY
+                              )
 translator = deepl.Translator(API_AUTH_KEY)
 
 
