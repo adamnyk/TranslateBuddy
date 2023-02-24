@@ -4,7 +4,10 @@ from models import db, connect_db, User, Translation, Phrasebook, PhrasebookTran
 from forms import LoginForm, UserAddForm, TranslateForm, UserEditForm, PhrasebookForm, AddTranslationForm, NoteForm, EditPhrasebookForm, FilterPhrasebookFrom
 from sqlalchemy.exc import IntegrityError
 import deepl
-# from secret import API_AUTH_KEY, SESSION_KEY
+try:
+    from secret import API_AUTH_KEY, SESSION_KEY
+except ImportError:
+    print('Secret file not found.')
 
 import os
 
@@ -18,14 +21,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY'
-                                        #   , SESSION_KEY
+                                          , SESSION_KEY
                                           )
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
 API_AUTH_KEY = os.environ.get("API_AUTH_KEY"
-                            #   , API_AUTH_KEY
+                              , API_AUTH_KEY
                               )
 translator = deepl.Translator(API_AUTH_KEY)
 
