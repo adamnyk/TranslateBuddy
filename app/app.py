@@ -29,9 +29,9 @@ except:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY'
-                                          , SESSION_KEY
-                                          )
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', SESSION_KEY)
+
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -643,7 +643,7 @@ def delete_translation(pb_id, t_id):
     pb.delete_translation(t)
     db.session.commit()
     
-    flash("Translation deleted.", "warning")
+    flash("Translation deleted.", "success")
     return redirect("/user")
 
 
