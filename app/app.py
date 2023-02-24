@@ -18,7 +18,7 @@ CURR_USER_KEY = "curr_user"
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///translator-app'))
+    os.environ.get('DATABASE_URL', 'postgresql://translator-app'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -51,6 +51,7 @@ def get_translation(text, source_lang, target_lang):
                             text_to=result.text)
     
     return translation
+
 
 ##############################################################################
 # Before request
