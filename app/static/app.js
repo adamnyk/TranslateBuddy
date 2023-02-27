@@ -17,16 +17,11 @@ $(".dropdown-menu").click(function (e) {
 ///////////////////////////////////////////////
 //** Phrasebook Accordion Groups */
 
-
 $(document).ready(function () {
 	let last = Cookies.get("activeAccordionGroup");
 
 	if (last != null) {
-		//remove default collapse settings
-		// $("#accordion .collapse").removeClass("show");
-		//show the last visible group
 		$("#" + last).collapse("show");
-		// $("#"+last).addClass("show");
 	}
 });
 
@@ -34,11 +29,6 @@ $(document).ready(function () {
 $("#accordion").bind("shown.bs.collapse hidden.bs.collapse", function () {
     let active = $("#accordion .show").attr("id");
 	Cookies.set("activeAccordionGroup", active);
-
-	// if (Cookies.get("activeAccordionGroup") === active) {
-	// 	Cookies.remove("activeAccordionGroup");
-	// } else {
-	// }
 });
 
 //Delete accordion position cookie when navigating away from page
