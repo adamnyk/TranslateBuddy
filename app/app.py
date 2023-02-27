@@ -182,7 +182,7 @@ def signup():
             return redirect("/")
 
         do_login(user)
-        clear_translation()
+
         flash("Welcome! Account created.", 'success')
         return redirect("/")
 
@@ -243,7 +243,8 @@ def home():
     phrasebook_add_form.lang_to.choices = source_languages
     
     translate_form = TranslateForm(source_lang = session.get("lang_from") or "EN",
-                                   target_lang = session.get("lang_to") or "ES")
+                                   target_lang = session.get("lang_to") or "ES", 
+                                   translate_text = session.get("last_translation", {}).get("text_from"))
     translate_form.target_lang.choices = target_languages
     translate_form.source_lang.choices = source_languages
     
