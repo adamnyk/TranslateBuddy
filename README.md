@@ -23,24 +23,23 @@ The intention of this feature was to add a social component to language learning
 
 
 ## User Flow
-- figma diagram
+
+![User Flow](/proposal/images/user_flow.png)
 
 ## Database
 
-- avoid data duplication, deleting shared translations, 
-- deleting orphan data
+Due to the ability to copy public translations and phrasebooks, the current database structure is designed to minimize the duplication of 'translation' data. Translation data is only deleted when it is determined that there are no longer any parent phrasebooks accessing them. Translation notes are stored on the join table, phrasebook_translation, and are therefore unique to each user. 
 
 ![translation-buddy-diagram](/proposal/translation-buddy-diagram.png)
 
 
 ## API
 
-[DeepL Translator API](https://www.deepl.com/pro-api?cta=header-pro-api)
 ![DeepL Logo](/proposal/images/deepl-ar21.png)
-- Seeing active development and improvements
-- Utilizes DeepL's Python library. 
+[DeepL Translator API](https://www.deepl.com/pro-api?cta=header-pro-api)
+
+TranslateBuddy processes translations through the DeepL translate API and uses it's Python client library. 
 
 ## Tech Stack
 
-HTML, CSS, Javascript, Jinja
-Python, Flask, PostgreSQL 
+HTML, CSS, Javascript, Jinja, Python, Flask, PostgreSQL 
