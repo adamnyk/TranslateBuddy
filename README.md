@@ -42,4 +42,4 @@ TranslateBuddy processes translations through the DeepL translate API and uses i
 
 ## Tech Stack
 
-HTML, CSS, Javascript, Jinja, Python, Flask, PostgreSQL 
+HTML, CSS, Javascript, Jinja, Python, Flask, PostgreSQL, SQLAlchemy 
