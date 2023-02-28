@@ -34,7 +34,7 @@
             <div class="col-5 col-md-6 col-lg-7">
                 {% for x,y in g.langs %}
                     {% if p.lang_from == x %}<span class="badge badge-light">{{y}}</span>
-                    > {% endif %}
+                    <span>></span>{% endif %}
                     {% if p.lang_to == x %}<span class="badge badge-secondary">{{y}}</span>{% endif %}
                 {% endfor %}
             </div>
