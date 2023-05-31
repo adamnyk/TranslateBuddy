@@ -19,9 +19,9 @@ app = Flask(__name__)
 
 try:
     prodURI = os.getenv('DATABASE_URL')
-    prodURI = prodURI.replace("postgres://", "postgresql://")
     app.config['SQLALCHEMY_DATABASE_URI'] = prodURI 
 except:
+    # For running locally
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///translator-app'
     
 
